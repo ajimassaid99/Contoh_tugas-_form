@@ -81,234 +81,257 @@ class _MaterialScreenState extends State<MaterialScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(14.0),
-        child: Column(
-          children: [
-            Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                const Icon(Icons.app_shortcut_outlined),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Create New Contacts',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                const Text(
-                    "A dialog is a type of modal window that appears in\n front of app content to provide critical information, or \n prompt for a decision to be made"),
-                const SizedBox(height: 15.0),
-                TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Name',
-                      hintText: 'Insert Your name',
-                      fillColor: Color(0xFFE7E0EC),
-                      floatingLabelBehavior: FloatingLabelBehavior.always),
-                ),
-                const SizedBox(height: 16.0),
-                TextField(
-                  controller: _numberController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Phone Number',
-                      hintText: '+62.....',
-                      fillColor: Color(0xFFE7E0EC),
-                      floatingLabelBehavior: FloatingLabelBehavior.always),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(7.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("Date"),
-                            TextButton(
-                              onPressed: () => _selectDate(context),
-                              child: const Text('Select Date'),
-                            )
-                          ]),
-                      Text(DateFormat('dd-MM-yyyy').format(_selectedDate)),
-                      const SizedBox(height: 20),
-                      const Text('color'),
-                      const SizedBox(height: 10),
-                      Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: _selectedColor,
-                          shape: BoxShape.rectangle,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: ElevatedButton(
-                            onPressed: _selectColor,
-                            child: const Text('Pick Color'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  _selectedColor, // warna latar belakang
-                            )),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('Pick Files'),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _pickFile();
-                          },
-                          child: const Text('Pick File'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (fileController.text != null)
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                      fileController.text,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                const SizedBox(height: 16.0),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final name = _nameController.text;
-                      final number = _numberController.text;
-                      final date = _selectedDate;
-                      final color = _selectedColor;
-                      final pathImage = fileController.text;
-                      setState(() {
-                        _data.add({
-                          'name': name,
-                          'number': number,
-                          'date': date,
-                          'color': color,
-                          'path': pathImage
-                        });
-                        _nameController.clear();
-                        _numberController.clear();
-                        fileController.clear();
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xFF6750A4), // warna latar belakang
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            20), // nilai radius yang diinginkan
-                      ),
-                    ),
-                    child: const Text('Submit'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            ListView.builder(
-              itemCount: _data.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    radius: 35,
-                    backgroundColor:
-                        _data[index]['color'] ?? const Color(0xFFEADDFF),
-                    child: _data[index]['path'] != ''
-                        ? ClipOval(
-                            child: Image.file(
-                              File(_data[index]['path']),
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              height: double.infinity,
-                            ),
-                          )
-                        : Text(
-                            _data[index]['name']?[0] ?? "A",
-                            style: const TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF21005D),
-                            ),
-                          ),
-                  ),
-                  title: Text(_data[index]['name']!),
-                  subtitle: Text(_data[index]['number']!),
-                  trailing: Container(
-                    width: 100,
-                    child: Row(
-                      children: <Widget>[
-                        Column(children: [
-                          Flexible(
-                            child: Row(children: [
-                              IconButton(
-                                iconSize: 20,
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  _showEditDialog(context, index);
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                iconSize: 20,
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Delete Contact'),
-                                      content: const Text(
-                                          'Are you sure you want to delete this contact?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              _data.removeAt(index);
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('Delete'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              )
-                            ]),
-                          ),
-                          Flexible(
-                            child: Text(DateFormat('dd-MM-yyyy').format(
-                                _data[index]['date'] ?? DateTime.now())),
-                          ),
-                        ]),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showDialogCreate(context);
+        },
+        child: Icon(Icons.add),
       ),
+      body: _data.isEmpty
+          ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Center(
+                child: Text("Data Kosong"),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("back"))
+            ])
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16.0),
+                  ListView.builder(
+                    itemCount: _data.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          radius: 35,
+                          backgroundColor:
+                              _data[index]['color'] ?? const Color(0xFFEADDFF),
+                          child: _data[index]['path'] != ''
+                              ? ClipOval(
+                                  child: Image.file(
+                                    File(_data[index]['path']),
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
+                                )
+                              : Text(
+                                  _data[index]['name']?[0] ?? "A",
+                                  style: const TextStyle(
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF21005D),
+                                  ),
+                                ),
+                        ),
+                        title: Text(_data[index]['name']!),
+                        subtitle: Text(_data[index]['number']!),
+                        trailing: Container(
+                          width: 100,
+                          child: Row(
+                            children: <Widget>[
+                              Column(children: [
+                                Flexible(
+                                  child: Row(children: [
+                                    IconButton(
+                                      iconSize: 20,
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        _showEditDialog(context, index);
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      iconSize: 20,
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text('Delete Contact'),
+                                            content: const Text(
+                                                'Are you sure you want to delete this contact?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _data.removeAt(index);
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('Delete'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  ]),
+                                ),
+                                Flexible(
+                                  child: Text(DateFormat('dd-MM-yyyy').format(
+                                      _data[index]['date'] ?? DateTime.now())),
+                                ),
+                              ]),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+    );
+  }
+
+  void _showDialogCreate(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Dialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(children: [
+              const SizedBox(
+                height: 50,
+              ),
+              const Icon(Icons.app_shortcut_outlined),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                'Create New Contacts',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 15.0),
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Name',
+                    hintText: 'Insert Your name',
+                    fillColor: Color(0xFFE7E0EC),
+                    floatingLabelBehavior: FloatingLabelBehavior.always),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _numberController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Phone Number',
+                    hintText: '+62.....',
+                    fillColor: Color(0xFFE7E0EC),
+                    floatingLabelBehavior: FloatingLabelBehavior.always),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(7.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Date"),
+                          TextButton(
+                            onPressed: () => _selectDate(context),
+                            child: const Text('Select Date'),
+                          )
+                        ]),
+                    Text(DateFormat('dd-MM-yyyy').format(_selectedDate)),
+                    const SizedBox(height: 20),
+                    const Text('color'),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: _selectedColor,
+                        shape: BoxShape.rectangle,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                          onPressed: _selectColor,
+                          child: const Text('Pick Color'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                _selectedColor, // warna latar belakang
+                          )),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text('Pick Files'),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _pickFile();
+                        },
+                        child: const Text('Pick File'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (fileController.text != null)
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    fileController.text,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              const SizedBox(height: 16.0),
+            ]),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                final name = _nameController.text;
+                final number = _numberController.text;
+                final date = _selectedDate;
+                final color = _selectedColor;
+                final pathImage = fileController.text;
+                setState(() {
+                  _data.add({
+                    'name': name,
+                    'number': number,
+                    'date': date,
+                    'color': color,
+                    'path': pathImage
+                  });
+                  _nameController.clear();
+                  _numberController.clear();
+                  fileController.clear();
+                });
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Save'),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("back"))
+          ],
+        );
+      },
     );
   }
 

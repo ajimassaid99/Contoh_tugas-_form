@@ -12,7 +12,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late DateTime _selectedDate;
   late Color _selectedColor;
-
+  
   @override
   void initState() {
     super.initState();
