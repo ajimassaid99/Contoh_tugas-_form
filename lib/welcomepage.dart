@@ -1,8 +1,11 @@
+import 'package:aplikasi_pertama/bloc/counter_bloc.dart';
+import 'package:aplikasi_pertama/bloc/text_bloc.dart';
 import 'package:aplikasi_pertama/createContact.dart';
 import 'package:aplikasi_pertama/main.dart';
-import 'package:aplikasi_pertama/provider/mainProvider.dart';
-import 'package:aplikasi_pertama/widget/contactScreen.dart';
+import 'package:aplikasi_pertama/view-model/mainProvider.dart';
+import 'package:aplikasi_pertama/view/contactScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -16,6 +19,9 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   late VideoPlayerController _controller;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  String text = "";
 
   @override
   void initState() {
@@ -41,8 +47,7 @@ class _WelcomePageState extends State<WelcomePage> {
     final counter = Provider.of<Counter>(context);
     return ChangeNotifierProvider<Counter>(
         create: (_) => Counter(),
-        child:
-            Consumer<Counter>(builder: (context, counter, child) {
+        child: Consumer<Counter>(builder: (context, counter, child) {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
@@ -55,8 +60,8 @@ class _WelcomePageState extends State<WelcomePage> {
                 ElevatedButton(
                   onPressed: () => counter.toggleTheme(),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        counter.selectedColor),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(counter.selectedColor),
                   ),
                   child: Text(counter.mode),
                 )
@@ -66,6 +71,50 @@ class _WelcomePageState extends State<WelcomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _phoneController,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.phone,
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      String name = _nameController.text;
+                      String phoneNumber = _phoneController.text;
+                      // Do something with the name and phone number
+                      print('Name: $name, Phone Number: $phoneNumber');
+                    },
+                    child: Text('Submit'),
+                  ),
+                  BlocListener<TextBloc, TextState>(
+                      listener: (context, state) {
+                        if (state is TextSucces) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Hitungan Genap!')),
+                          );
+                          // context.read<CounterBloc>.add(Increment(angka: 1,));
+                        }
+                      },
+                      child: Center(child: Text(text))),
+                  ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<TextBloc>()
+                          .add(ChangeText("sudah di tekan", ''));
+                    },
+                    child: const Text('Kirim'),
+                  ),
                   Text('${counter.count}'),
                   ElevatedButton(
                     onPressed: () => counter.increment(),
@@ -85,8 +134,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   'number': '123-456-7890',
                                   'color':
                                       const Color.fromARGB(255, 7, 170, 29),
-                                  'path':
-                                      '', // Provide the file path if available
+                                  'path': '',
                                   'date': DateTime.now(),
                                 },
                                 {

@@ -1,16 +1,19 @@
+import 'package:aplikasi_pertama/bloc/text_bloc.dart';
 import 'package:aplikasi_pertama/createContact.dart';
-import 'package:aplikasi_pertama/provider/mainProvider.dart';
-import 'package:aplikasi_pertama/provider/themeProvider.dart';
+import 'package:aplikasi_pertama/view-model/mainProvider.dart';
+import 'package:aplikasi_pertama/view-model/themeProvider.dart';
 import 'package:aplikasi_pertama/welcomepage.dart';
 import 'package:aplikasi_pertama/widget/MaterialScreen.dart';
-import 'package:aplikasi_pertama/widget/contactScreen.dart';
+import 'package:aplikasi_pertama/view/contactScreen.dart';
 import 'package:aplikasi_pertama/widget/galeryScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    MultiProvider(providers: [
+    MultiBlocProvider(providers: [
+      BlocProvider<TextBloc>(create: (context) => TextBloc()),
       Provider<Counter>(create: (_) => Counter()),
       Provider<ThemeProvider>(create: (_) => ThemeProvider()),
     ], child: const MyApp()),
@@ -32,14 +35,16 @@ class _MyAppState extends State<MyApp> {
     MaterialScreen(),
   ];
 
-
   @override
   Widget build(BuildContext context) {
-     final counter = Provider.of<Counter>(context);
+    //  final counter = Provider.of<Counter>(context);
     return MaterialApp(
-      theme: counter.isDarkMode?ThemeData.dark():ThemeData.light(),
+      // theme: counter.isDarkMode?ThemeData.dark():ThemeData.light(),
       title: 'Material App',
-      home: const WelcomePage(),
+      home: BlocProvider(
+        create: (context) => TextBloc(),
+        child: const WelcomePage(),
+      ),
       routes: {
         '/contact': (context) => const FormCOntact(),
         '/gallery': (context) => GalleryScreen(),

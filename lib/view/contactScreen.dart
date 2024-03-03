@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:aplikasi_pertama/main.dart';
-import 'package:aplikasi_pertama/provider/mainProvider.dart';
+import 'package:aplikasi_pertama/view-model/mainProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
