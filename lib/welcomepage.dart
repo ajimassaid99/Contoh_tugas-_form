@@ -67,125 +67,128 @@ class _WelcomePageState extends State<WelcomePage> {
                 )
               ],
             ),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.phone,
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      String name = _nameController.text;
-                      String phoneNumber = _phoneController.text;
-                      // Do something with the name and phone number
-                      print('Name: $name, Phone Number: $phoneNumber');
-                    },
-                    child: Text('Submit'),
-                  ),
-                  BlocListener<TextBloc, TextState>(
-                      listener: (context, state) {
-                        if (state is TextSucces) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Hitungan Genap!')),
-                          );
-                          // context.read<CounterBloc>.add(Increment(angka: 1,));
-                        }
+            body: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // TextFormField(
+                    //   controller: _nameController,
+                    //   decoration: const InputDecoration(
+                    //     labelText: 'Name',
+                    //     border: OutlineInputBorder(),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 20),
+                    // TextFormField(
+                    //   controller: _phoneController,
+                    //   decoration: const InputDecoration(
+                    //     labelText: 'Phone Number',
+                    //     border: OutlineInputBorder(),
+                    //   ),
+                    //   keyboardType: TextInputType.phone,
+                    // ),
+                    // const SizedBox(height: 20),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     String name = _nameController.text;
+                    //     String phoneNumber = _phoneController.text;
+                    //     // Do something with the name and phone number
+                    //     print('Name: $name, Phone Number: $phoneNumber');
+                    //   },
+                    //   child: const Text('Submit'),
+                    // ),
+                    // BlocListener<TextBloc, TextState>(
+                    //     listener: (context, state) {
+                    //       if (state is TextSucces) {
+                    //         ScaffoldMessenger.of(context).showSnackBar(
+                    //           const SnackBar(content: Text('Hitungan Genap!')),
+                    //         );
+                    //         // context.read<CounterBloc>.add(Increment(angka: 1,));
+                    //       }
+                    //     },
+                    //     child: Center(child: Text(text))),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     context
+                    //         .read<TextBloc>()
+                    //         .add(ChangeText("sudah di tekan", ''));
+                    //   },
+                    //   child: const Text('Kirim'),
+                    // ),
+                    // Text('${counter.count}'),
+                    // ElevatedButton(
+                    //   onPressed: () => counter.increment(),
+                    //   child: const Text('Tambah'),
+                    // ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Navigasi ke halaman Contact
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ContactList(),
+                              settings: RouteSettings(
+                                arguments: [
+                                  {
+                                    'name': 'John Doe',
+                                    'number': '123-456-7890',
+                                    'color':
+                                        const Color.fromARGB(255, 7, 170, 29),
+                                    'path': '',
+                                    'date': DateTime.now(),
+                                  },
+                                  {
+                                    'name': 'Yohn Doe 2',
+                                    'number': '123-456-7890',
+                                    'color':
+                                        const Color.fromARGB(255, 73, 230, 164),
+                                    'path':
+                                        '', // Provide the file path if available
+                                    'date': DateTime.now(),
+                                  },
+                                ],
+                              ),
+                            ));
                       },
-                      child: Center(child: Text(text))),
-                  ElevatedButton(
-                    onPressed: () {
-                      context
-                          .read<TextBloc>()
-                          .add(ChangeText("sudah di tekan", ''));
-                    },
-                    child: const Text('Kirim'),
-                  ),
-                  Text('${counter.count}'),
-                  ElevatedButton(
-                    onPressed: () => counter.increment(),
-                    child: Text('Tambah'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigasi ke halaman Contact
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ContactList(),
-                            settings: RouteSettings(
-                              arguments: [
-                                {
-                                  'name': 'John Doe',
-                                  'number': '123-456-7890',
-                                  'color':
-                                      const Color.fromARGB(255, 7, 170, 29),
-                                  'path': '',
-                                  'date': DateTime.now(),
-                                },
-                                {
-                                  'name': 'Yohn Doe 2',
-                                  'number': '123-456-7890',
-                                  'color': Color.fromARGB(255, 73, 230, 164),
-                                  'path':
-                                      '', // Provide the file path if available
-                                  'date': DateTime.now(),
-                                },
-                              ],
-                            ),
-                          ));
-                    },
-                    child: Image.asset(
-                      'assets/icon/ContactsIcon.jpg',
-                      width: 40,
-                      height: 30,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigasi ke halaman Gallery
-                      Navigator.pushNamed(context, "/gallery");
-                    },
-                    child: Image.asset(
-                      'assets/icon/galeryIcon.jpg',
-                      width: 40,
-                      height: 30,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 20.0),
-                  ),
-                  const Text('With assets mp4'),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: <Widget>[
-                          VideoPlayer(_controller),
-                          VideoProgressIndicator(_controller,
-                              allowScrubbing: true),
-                        ],
+                      child: Image.asset(
+                        'assets/icon/ContactsIcon.jpg',
+                        width: 40,
+                        height: 30,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Navigasi ke halaman Gallery
+                        Navigator.pushNamed(context, "/gallery");
+                      },
+                      child: Image.asset(
+                        'assets/icon/galeryIcon.jpg',
+                        width: 40,
+                        height: 30,
+                      ),
+                    ),
+                    // Container(
+                    //   padding: const EdgeInsets.only(top: 20.0),
+                    // ),
+                    // const Text('With assets mp4'),
+                    // Container(
+                    //   padding: const EdgeInsets.all(20),
+                    //   child: AspectRatio(
+                    //     aspectRatio: _controller.value.aspectRatio,
+                    //     child: Stack(
+                    //       alignment: Alignment.bottomCenter,
+                    //       children: <Widget>[
+                    //         VideoPlayer(_controller),
+                    //         VideoProgressIndicator(_controller,
+                    //             allowScrubbing: true),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
             ),
           );

@@ -1,5 +1,9 @@
 import 'package:aplikasi_pertama/bloc/text_bloc.dart';
 import 'package:aplikasi_pertama/createContact.dart';
+import 'package:aplikasi_pertama/feature/auth/bloc/auth_bloc.dart';
+import 'package:aplikasi_pertama/feature/auth/view/loginPage.dart';
+import 'package:aplikasi_pertama/feature/auth/view/singUpPage.dart';
+import 'package:aplikasi_pertama/feature/auth/view/userListPage.dart';
 import 'package:aplikasi_pertama/view-model/mainProvider.dart';
 import 'package:aplikasi_pertama/view-model/themeProvider.dart';
 import 'package:aplikasi_pertama/welcomepage.dart';
@@ -14,6 +18,7 @@ void main() {
   runApp(
     MultiBlocProvider(providers: [
       BlocProvider<TextBloc>(create: (context) => TextBloc()),
+      BlocProvider<AuthBloc>(create: (context) => AuthBloc()),
       Provider<Counter>(create: (_) => Counter()),
       Provider<ThemeProvider>(create: (_) => ThemeProvider()),
     ], child: const MyApp()),
@@ -43,11 +48,13 @@ class _MyAppState extends State<MyApp> {
       title: 'Material App',
       home: BlocProvider(
         create: (context) => TextBloc(),
-        child: const WelcomePage(),
+        child: const LoginPage(),
       ),
       routes: {
         '/contact': (context) => const FormCOntact(),
         '/gallery': (context) => GalleryScreen(),
+        '/SingUp': (context) => SignUpPage(),
+        '/userList': (context) => UserListPage()
       },
     );
   }
