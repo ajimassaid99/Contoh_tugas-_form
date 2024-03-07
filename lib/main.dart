@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:aplikasi_pertama/bloc/text_bloc.dart';
 import 'package:aplikasi_pertama/createContact.dart';
 import 'package:aplikasi_pertama/feature/auth/bloc/auth_bloc.dart';
 import 'package:aplikasi_pertama/feature/auth/view/loginPage.dart';
 import 'package:aplikasi_pertama/feature/auth/view/singUpPage.dart';
 import 'package:aplikasi_pertama/feature/auth/view/userListPage.dart';
+import 'package:aplikasi_pertama/model/userModel.dart';
 import 'package:aplikasi_pertama/view-model/mainProvider.dart';
 import 'package:aplikasi_pertama/view-model/themeProvider.dart';
 import 'package:aplikasi_pertama/welcomepage.dart';
@@ -12,9 +15,16 @@ import 'package:aplikasi_pertama/view/contactScreen.dart';
 import 'package:aplikasi_pertama/widget/galeryScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  var path = Directory.current.path;
+    Hive
+      ..init(path)
+      ..registerAdapter(UserModelAdapter());
   runApp(
     MultiBlocProvider(providers: [
       BlocProvider<TextBloc>(create: (context) => TextBloc()),

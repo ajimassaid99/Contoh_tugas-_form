@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:aplikasi_pertama/core/database/UserLocaldatabase.dart';
 import 'package:aplikasi_pertama/model/userModel.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 class UserListPage extends StatefulWidget {
   @override
@@ -14,6 +18,20 @@ class _UserListPageState extends State<UserListPage> {
   void initState() {
     super.initState();
     _userListFuture = UserLocalDatasource.instance.getAllUsers();
+
+    openHive();
+    print("INI DATA JALAN");
+  }
+
+  var data;
+  void openHive() async {
+    
+    await Hive.openBox('my_box');
+    var box = await Hive.box('my_box');
+    box.put('user', [UserModel(username: "AJi", password: "massaid")]);
+    List<UserModel> user = box.get('user');
+    // UserModel userData = user[0];
+    print("INI DATA ${user[0].username}");
   }
 
   @override
